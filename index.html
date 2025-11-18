@@ -3,38 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台南古都扶輪社 | 古都新頁 · 服務超我</title>
-    <!-- 載入 Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 載入 Lucide Icons (用於簡潔的圖標) -->
+    <title>台南古都扶輪社 | 古都新頁 · 服務超我 (純 CSS)</title>
+    
+    <!-- 載入 Lucide Icons (用於簡潔的圖標) - 這是唯一外部腳本 -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* 定義字體：中文使用襯線字體增添古都沉穩感，英文使用 Inter (Tailwind 預設) 體現專業 */
+        /* ---------------------------------------------------------------------- */
+        /* 1. 顏色與字體變數定義 (與 Tailwind 版本相同) */
+        /* ---------------------------------------------------------------------- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap');
         
         :root {
-            /* 主色：深藍 (Rotary Blue) */
-            --color-primary: #1E3A8A; /* indigo-800 */
-            /* 輔色：古銅金 (Antique Gold) */
-            --color-secondary: #D97706; /* amber-600 */
+            --color-primary: #1E3A8A; /* 深藍 (Rotary Blue) */
+            --color-secondary: #D97706; /* 古銅金 (Antique Gold) */
+            --color-text-dark: #1F2937; /* 接近 gray-800 */
+            --color-bg-light: #F8FAFCA0;
+            --color-white: #ffffff;
+            --color-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --color-transition: all 0.3s ease-in-out;
         }
 
         body {
             font-family: 'Noto Serif TC', serif, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            background-color: #F8FAFCA0; /* 接近純白色的輕微底色 */
+            background-color: var(--color-bg-light); 
+            color: var(--color-text-dark);
+            scroll-behavior: smooth;
         }
-        
+
+        h1, h2, h3 {
+            font-family: 'Noto Serif TC', serif;
+        }
+
+        /* ---------------------------------------------------------------------- */
+        /* 2. 通用與輔助樣式 (Utilities) */
+        /* ---------------------------------------------------------------------- */
+        /* 全域移除所有連結的下底線 */
+        a {
+            text-decoration: none; 
+        }
+
+        .container {
+            max-width: 1280px; /* 模擬 max-w-7xl */
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem; /* 模擬 px-4 */
+            padding-right: 1rem;
+        }
+        @media (min-width: 640px) { 
+            .container { padding-left: 1.5rem; padding-right: 1.5rem; } /* 模擬 sm:px-6 */
+        }
+        @media (min-width: 1024px) { 
+            .container { padding-left: 2rem; padding-right: 2rem; } /* 模擬 lg:px-8 */
+        }
+
         .bg-primary { background-color: var(--color-primary); }
         .text-primary { color: var(--color-primary); }
         .bg-secondary { background-color: var(--color-secondary); }
         .text-secondary { color: var(--color-secondary); }
+        .text-white { color: var(--color-white); }
         
-        /* 滾動動畫平滑過渡 */
-        .scroll-smooth {
-            scroll-behavior: smooth;
+        .gudu-border-bottom {
+            border-bottom: 4px double var(--color-secondary);
+            padding-bottom: 2rem;
+            margin-bottom: 4rem;
         }
 
-        /* 模擬扶輪社徽章的圓環效果，用於 Logo */
+        /* 扶輪社徽章效果 */
         .rotary-wheel {
             width: 1.5rem;
             height: 1.5rem;
@@ -56,53 +90,384 @@
             border-radius: 50%;
         }
 
-        /* 傳統紋樣邊框的簡單模擬，用於區塊分隔 */
-        .gudu-border-bottom {
-            border-bottom: 4px double var(--color-secondary);
-            padding-bottom: 2rem;
-            margin-bottom: 4rem;
+        /* ---------------------------------------------------------------------- */
+        /* 3. HEADER 樣式 */
+        /* ---------------------------------------------------------------------- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(30, 58, 138, 0.95); /* bg-primary/95 */
+            box-shadow: var(--color-shadow);
+            z-index: 50;
+            /* backdrop-filter: blur(4px); 現代 CSS 效果，但為求穩定暫不添加 */
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between; /* justify-between */
+            align-items: center; /* items-center */
+            height: 4rem; /* h-16 */
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            letter-spacing: 0.05em; /* tracking-wider */
+        }
+        .nav-links {
+            display: none;
+            gap: 1.5rem; /* space-x-6 */
+        }
+        .nav-link {
+            transition: var(--color-transition);
+        }
+        .nav-link:hover {
+            color: var(--color-secondary);
+        }
+        .nav-button {
+            background-color: var(--color-secondary);
+            padding: 0.375rem 1rem; /* px-4 py-1.5 */
+            color: var(--color-primary);
+            font-weight: 600;
+            border-radius: 9999px; /* rounded-full */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2p x rgba(0, 0, 0, 0.06); /* shadow-md */
+            transition: var(--color-transition);
+        }
+        .nav-button:hover {
+            background-color: #FBBF24; /* amber-400 */
+            transform: scale(1.05);
+        }
+        .mobile-menu-btn {
+            color: var(--color-white);
+            transition: var(--color-transition);
+        }
+        .mobile-menu-btn:hover {
+            color: var(--color-secondary);
         }
 
-        /* 響應式圖片處理 */
-        .hero-bg {
-/*            background-image: url('https://placehold.co/1200x600/1E3A8A/F8FAF0?text=台南古都+Rotary+Club+形象'); */
-            background-size: cover;
-            background-position: center;
-            background-color: #1E3A8A;
-        }
-
-        @media (min-width: 640px) {
-            .hero-bg {
-                /*background-image: url('https://placehold.co/1600x800/1E3A8A/F8FAF0?'); */
-                background-color: #1E3A8A;
+        /* 桌面斷點 (md: 768px) */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: none;
             }
         }
+
+        /* ---------------------------------------------------------------------- */
+        /* 4. HERO 樣式 */
+        /* ---------------------------------------------------------------------- */
+        .hero-section {
+            position: relative;
+            padding-top: 4rem; /* pt-16 */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            
+            /* 背景與備援 */
+            background-color: var(--color-primary); 
+            background-image: url('https://placehold.co/1200x600/1E3A8A/F8FAF0?text=台南古都+Rotary+Club+形象'); 
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* 桌面版背景圖 (sm: 640px) */
+        @media (min-width: 640px) {
+            .hero-section {
+                background-image: url('https://placehold.co/1600x800/1E3A8A/F8FAF0?text=古都新頁+|+服務超我+Tainan+Gudu+Rotary+Club'); 
+            }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(30, 58, 138, 0.7); /* bg-primary/70 */
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 56rem; /* max-w-4xl */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-title {
+            font-size: 3rem; /* text-5xl */
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--color-white);
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        @media (min-width: 640px) {
+            .hero-title { font-size: 4.5rem; } /* sm:text-7xl */
+        }
+        .hero-subtitle {
+            font-size: 1.25rem; /* text-xl */
+            color: rgba(255, 255, 255, 0.9); /* text-white/90 */
+            margin-bottom: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.025em;
+        }
+        @media (min-width: 640px) {
+            .hero-subtitle { font-size: 1.5rem; } /* sm:text-2xl */
+        }
+        .hero-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--color-secondary);
+            color: var(--color-primary);
+            padding: 0.75rem 2rem; /* px-8 py-3 */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 700;
+            border-radius: 9999px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-xl */
+            transition: var(--color-transition);
+        }
+        .hero-button:hover {
+            transform: scale(1.05);
+            background-color: #FBBF24; /* hover:bg-amber-400 */
+        }
+
+        /* ---------------------------------------------------------------------- */
+        /* 5. 區塊通用樣式 */
+        /* ---------------------------------------------------------------------- */
+        .section {
+            padding-top: 4rem; /* py-16 */
+            padding-bottom: 4rem;
+        }
+        @media (min-width: 640px) {
+            .section {
+                padding-top: 6rem; /* sm:py-24 */
+                padding-bottom: 6rem;
+            }
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--color-primary);
+        }
+        @media (min-width: 640px) {
+            .section-title { font-size: 3rem; } /* sm:text-5xl */
+        }
+        .section-subtitle {
+            font-size: 1.125rem; /* text-lg */
+            color: #6B7280; /* gray-500 */
+        }
+        
+        /* ---------------------------------------------------------------------- */
+        /* 6. 服務卡片樣式 (Service Cards) */
+        /* ---------------------------------------------------------------------- */
+        .service-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 72rem; /* max-w-6xl */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .service-grid {
+                grid-template-columns: repeat(3, 1fr); /* md:grid-cols-3 */
+            }
+        }
+        .service-card {
+            background-color: var(--color-white);
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 1.5rem;
+            border-top: 4px solid var(--color-secondary); /* border-t-4 */
+            transition: var(--color-transition);
+            text-align: center;
+        }
+        .service-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* hover:shadow-2xl */
+            transform: translateY(-0.25rem); /* hover:-translate-y-1 */
+        }
+        .card-icon {
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+            width: 2.5rem; /* w-10 */
+            height: 2.5rem; /* h-10 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .card-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.75rem;
+        }
+        .card-text {
+            color: #4B5563; /* gray-600 */
+        }
+
+        /* ---------------------------------------------------------------------- */
+        /* 7. 例會資訊樣式 */
+        /* ---------------------------------------------------------------------- */
+        .meeting-info-box {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--color-shadow);
+            border-left: 4px solid var(--color-secondary);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+        @media (min-width: 768px) {
+             .meeting-info-box {
+                grid-template-columns: 1fr 3fr; /* md:grid-cols-4 (roughly 1/4 and 3/4) */
+            }
+        }
+
+        .meeting-time {
+            text-align: center;
+        }
+        @media (min-width: 768px) {
+            .meeting-time { text-align: left; }
+        }
+
+        .meeting-time-day {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700;
+            color: var(--color-secondary);
+        }
+        .meeting-time-label {
+            font-size: 0.875rem; /* text-sm */
+            color: #6B7280; /* gray-500 */
+        }
+        .meeting-details-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        /* 消息列表 */
+        .news-list {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            background-color: #F3F4F6; /* gray-100 */
+            border-radius: 0.5rem;
+            gap: 1rem;
+        }
+        .news-tag {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600;
+            color: var(--color-white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+        .tag-activity { background-color: var(--color-primary); }
+        .tag-announce { background-color: var(--color-secondary); }
+        
+        .news-title {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500;
+            color: var(--color-primary);
+        }
+        .news-date {
+            font-size: 0.875rem; /* text-sm */
+            color: #6B7280; /* gray-500 */
+        }
+
+        /* ---------------------------------------------------------------------- */
+        /* 8. FOOTER 樣式 */
+        /* ---------------------------------------------------------------------- */
+        .main-footer {
+            background-color: #111827; /* gray-900 */
+            color: #D1D5DB; /* gray-300 */
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .footer-grid > div:first-child {
+                grid-column: span 2 / span 2; /* md:col-span-2 */
+            }
+        }
+        .footer-heading {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-bottom: 0.75rem;
+        }
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links a:hover {
+            color: var(--color-white);
+            transition: var(--color-transition);
+        }
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        .social-icons a {
+            color: #9CA3AF; /* gray-400 */
+            transition: var(--color-transition);
+        }
+        .social-icons a:hover {
+            color: var(--color-white);
+        }
+
+        .copyright {
+            border-top: 1px solid #4B5563; /* border-gray-700 */
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6B7280;
+        }
+
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- 1. 導覽列 (Navigation Bar) -->
-    <header class="fixed top-0 left-0 w-full bg-primary/95 shadow-lg backdrop-blur-sm z-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+    <header class="main-header">
+        <div class="container header-content">
             <!-- 左側：Logo -->
-            <a href="#hero" class="flex items-center text-white text-xl font-bold tracking-wider">
+            <a href="#hero" class="header-logo text-white">
                 <span class="rotary-wheel"></span>
                 台南古都扶輪社
             </a>
             
             <!-- 右側連結 (桌面版) -->
-            <nav class="hidden md:flex space-x-6">
-                <a href="#about" class="text-white hover:text-secondary transition duration-300">古都簡介</a>
-                <a href="#service" class="text-white hover:text-secondary transition duration-300">服務項目</a>
-                <a href="#news" class="text-white hover:text-secondary transition duration-300">最新消息</a>
-                <a href="#contact" class="text-white hover:text-secondary transition duration-300">聯絡我們</a>
-                <button class="bg-secondary px-4 py-1.5 text-primary font-semibold rounded-full shadow-md hover:bg-amber-400 transition duration-300 transform hover:scale-105">
+            <nav class="nav-links">
+                <a href="#about" class="nav-link text-white">古都簡介</a>
+                <a href="#service" class="nav-link text-white">服務項目</a>
+                <a href="#news" class="nav-link text-white">最新消息</a>
+                <a href="#contact" class="nav-link text-white">聯絡我們</a>
+                <!-- 注意：這裡使用 button 標籤，故無需移除下底線 -->
+                <button class="nav-button">
                     社友專區
                 </button>
             </nav>
 
-            <!-- 移動版選單按鈕 (僅為裝飾性，單頁網站不需實際菜單開關邏輯) -->
-            <button class="md:hidden text-white hover:text-secondary">
+            <!-- 移動版選單按鈕 -->
+            <button class="mobile-menu-btn">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </div>
@@ -110,86 +475,89 @@
 
     <main>
         <!-- 🔱 A. 英雄區塊 (Hero Section) -->
-        <section id="hero" class="hero-bg relative pt-16 h-screen flex items-center justify-center text-center">
-            <div class="absolute inset-0 bg-primary/70"></div> <!-- 藍色疊層增加對比 -->
-            <div class="relative z-10 p-8 max-w-4xl mx-auto">
-                <h1 class="text-5xl sm:text-7xl font-extrabold mb-4 text-white drop-shadow-lg" style="font-family: 'Noto Serif TC', serif;">
+        <section id="hero" class="hero-section">
+            <div class="hero-overlay"></div> 
+            <div class="hero-content">
+                <h1 class="hero-title" style="font-family: 'Noto Serif TC', serif;">
                     古都新頁 · 服務超我
                 </h1>
-                <p class="text-xl sm:text-2xl text-white/90 mb-8 font-light tracking-wider">
+                <p class="hero-subtitle">
                     承載府城四百年文化之光，開啟扶輪服務新生
                 </p>
-                <a href="#service" class="inline-flex items-center bg-secondary text-primary px-8 py-3 text-lg font-bold rounded-full shadow-xl transition duration-300 transform hover:scale-105 hover:bg-amber-400">
+                <a href="#service" class="hero-button">
                     瞭解我們的行動
                     <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
                 </a>
             </div>
         </section>
 
-        <!-- 📜 B. 社團簡介 (About Tainan Old Capital) -->
-        <section id="about" class="py-16 sm:py-24 container mx-auto px-4 sm:px-6 lg:px-8">
-            <header class="text-center mb-12 gudu-border-bottom">
-                <h2 class="text-4xl sm:text-5xl font-bold text-primary mb-3" style="font-family: 'Noto Serif TC', serif;">
-                    古都扶輪 | 我們的精神與傳承
-                </h2>
-                <p class="text-lg text-gray-500">About Tainan Old Capital</p>
-            </header>
+        <!-- 📜 B. 社團簡介 (About Tainan Gudu) -->
+        <section id="about" class="section">
+            <div class="container">
+                <header class="section-header gudu-border-bottom">
+                    <h2 class="section-title" style="font-family: 'Noto Serif TC', serif;">
+                        古都扶輪 | 我們的精神與傳承
+                    </h2>
+                    <p class="section-subtitle">About Tainan Gudu Rotary Club</p>
+                </header>
 
-            <div class="max-w-4xl mx-auto text-center space-y-6 text-lg">
-                <p>
-                    台南古都扶輪社（Rotary Club of Tainan Old Capital）創立於 <span class="text-secondary font-semibold">2023年中</span>，儘管是扶輪大家庭的新成員，我們肩負著承載歷史、開創新局的使命。以「古都」為名，我們積極響應 <span class="text-secondary font-semibold">「府城400年」</span> 活動，立志將扶輪精神與台南深厚的文化底蘊結合。
-                </p>
-                <p>
-                    我們的母社為 <span class="text-primary font-semibold">台南東北扶輪社</span>，傳承了優良的服務傳統。我們始終秉持扶輪社 <strong class="text-primary">「超我服務」</strong> 的宗旨與 <strong class="text-primary">「四大考驗」</strong>，致力於社區服務、人道關懷與國際交流。
-                </p>
-                <div class="flex flex-wrap justify-center gap-4 pt-4">
-                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">✨ 新創活力</span>
-                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">📜 府城400年</span>
-                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">🤝 服務超我</span>
+                <div class="max-w-4xl mx-auto text-center space-y-6 text-lg">
+                    <p>
+                        台南古都扶輪社（Tainan Gudu Rotary Club）創立於 <span class="text-secondary font-semibold">2024年初</span>，儘管是扶輪大家庭的新成員，我們肩負著承載歷史、開創新局的使命。以「古都」為名，我們積極響應 <span class="text-secondary font-semibold">「府城400年」</span> 活動，立志將扶輪精神與台南深厚的文化底蘊結合。
+                    </p>
+                    <p>
+                        我們的母社為 <span class="text-primary font-semibold">台南東北扶輪社</span>，傳承了優良的服務傳統。我們始終秉持扶輪社 <strong class="text-primary">「服務超我」</strong> 的宗旨與 <strong class="text-primary">「四大考驗」</strong>，致力於社區服務、人道關懷與國際交流。
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
+                        <span class="news-tag tag-activity">✨ 新創活力</span>
+                        <span class="news-tag tag-activity">📜 府城400年</span>
+                        <span class="news-tag tag-activity">🤝 服務超我</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ✨ C. 核心服務 (Our Signature Projects) -->
-        <section id="service" class="py-16 sm:py-24 bg-white/80">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <header class="text-center mb-12 gudu-border-bottom">
-                    <h2 class="text-4xl sm:text-5xl font-bold text-primary mb-3" style="font-family: 'Noto Serif TC', serif;">
-                        United for Good | 我們的影響力
+        <section id="service" class="section" style="background-color: rgba(255, 255, 255, 0.8);">
+            <div class="container">
+                <header class="section-header gudu-border-bottom">
+                    <h2 class="section-title" style="font-family: 'Noto Serif TC', serif;">
+                        神奇扶輪 | 我們的影響力
                     </h2>
-                    <p class="text-lg text-gray-500">Our Signature Projects & Community Impact</p>
+                    <p class="section-subtitle">Our Signature Projects & Community Impact</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- 服務項目網格 -->
+                <div class="service-grid">
                     <!-- Card 1: 熱血號召 (捐血活動) -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-secondary hover:shadow-2xl transition duration-500 transform hover:-translate-y-1">
-                        <div class="text-secondary mb-4">
+                    <div class="service-card">
+                        <div class="card-icon">
                             <i data-lucide="droplet" class="w-10 h-10 mx-auto"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary mb-3 text-center">熱血號召 | 社區捐血活動</h3>
-                        <p class="text-gray-600 text-center">
+                        <h3 class="card-title">熱血號召 | 社區捐血活動</h3>
+                        <p class="card-text">
                             每年定期舉辦大型捐血活動，號召古都社友與在地居民，以熱血傳遞愛心，緩解血庫壓力，是我們最直接的社區服務之一。
                         </p>
                     </div>
 
                     <!-- Card 2: 社區關懷 (服務弱勢) -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-secondary hover:shadow-2xl transition duration-500 transform hover:-translate-y-1">
-                        <div class="text-secondary mb-4">
+                    <div class="service-card">
+                        <div class="card-icon">
                             <i data-lucide="heart" class="w-10 h-10 mx-auto"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary mb-3 text-center">社區關懷 | 服務弱勢家庭</h3>
-                        <p class="text-gray-600 text-center">
+                        <h3 class="card-title">社區關懷 | 服務弱勢家庭</h3>
+                        <p class="card-text">
                             從物資捐贈到志工陪伴，我們深入台南各角落，關注獨居老人、偏鄉學童及弱勢家庭，提供實質的支持與溫暖。
                         </p>
                     </div>
 
                     <!-- Card 3: 國際交流 (跨國合作) -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-secondary hover:shadow-2xl transition duration-500 transform hover:-translate-y-1">
-                        <div class="text-secondary mb-4">
+                    <div class="service-card">
+                        <div class="card-icon">
                             <i data-lucide="globe" class="w-10 h-10 mx-auto"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary mb-3 text-center">國際交流 | 跨國人道合作</h3>
-                        <p class="text-gray-600 text-center">
+                        <h3 class="card-title">國際交流 | 跨國人道合作</h3>
+                        <p class="card-text">
                             積極與國際扶輪社團合作，參與全球獎助金計畫，將台南的愛心延伸至海外，共同推動世界和平與人類福祉。
                         </p>
                     </div>
@@ -198,48 +566,51 @@
         </section>
 
         <!-- 🗓️ D. 最新消息/例會資訊 (News & Meetings) -->
-        <section id="news" class="py-16 sm:py-24 container mx-auto px-4 sm:px-6 lg:px-8">
-            <header class="text-center mb-12 gudu-border-bottom">
-                <h2 class="text-4xl sm:text-5xl font-bold text-primary mb-3" style="font-family: 'Noto Serif TC', serif;">
-                    古都動態 | 例會與最新消息
-                </h2>
-                <p class="text-lg text-gray-500">Club News & Meeting Schedule</p>
-            </header>
+        <section id="news" class="section">
+            <div class="container">
+                <header class="section-header gudu-border-bottom">
+                    <h2 class="section-title" style="font-family: 'Noto Serif TC', serif;">
+                        古都動態 | 例會與最新消息
+                    </h2>
+                    <p class="section-subtitle">Club News & Meeting Schedule</p>
+                </header>
 
-            <div class="max-w-5xl mx-auto space-y-10">
-                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-secondary grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                    <div class="md:col-span-1 text-center md:text-left">
-                        <p class="text-4xl font-bold text-secondary">每個月 <br>第二、第四 <br>週三</p>
-                        <p class="text-sm text-gray-500">Regular Meeting</p>
-                    </div>
-                    <div class="md:col-span-3">
-                        <h3 class="text-xl font-semibold text-primary mb-1">例會時間與地點 (請參考此處更新)</h3>
-                        <p class="text-lg text-gray-700"><strong>時間：</strong> 18:00 註冊</p>
-                        <p class="text-lg text-gray-700"><strong>地點：</strong> 台南市中西區成功路28號 (禧榕軒大飯店)</p>
-                    </div>
-                </div>
-
-                <!-- 最新消息列表 (Placeholder) -->
-                <div class="space-y-4">
-                    <div class="p-4 bg-gray-100 rounded-lg flex items-start space-x-4">
-                        <span class="text-sm font-semibold text-white bg-primary px-3 py-1 rounded-full mt-1 flex-shrink-0">活動</span>
-                        <div>
-                            <p class="text-lg font-medium text-primary">古都社授證週年慶典圓滿成功！</p>
-                            <p class="text-sm text-gray-500">2025年1月10日：超過百位嘉賓共同見證古都社成長，為社區服務開啟新篇章。</p>
+                <div style="max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem;">
+                    <!-- 例會資訊 -->
+                    <div class="meeting-info-box">
+                        <div class="meeting-time">
+                            <p class="meeting-time-day">每週三</p>
+                            <p class="meeting-time-label">Regular Meeting</p>
+                        </div>
+                        <div class="meeting-details">
+                            <h3 class="meeting-details-title">例會時間與地點 (請參考此處更新)</h3>
+                            <p style="font-size: 1.125rem; color: #374151;"><strong>時間：</strong> 18:30 點鐘</p>
+                            <p style="font-size: 1.125rem; color: #374151;"><strong>地點：</strong> 台南市中西區成功路1號 (暫定，請以實際通知為準)</p>
                         </div>
                     </div>
-                    <div class="p-4 bg-gray-100 rounded-lg flex items-start space-x-4">
-                        <span class="text-sm font-semibold text-white bg-secondary px-3 py-1 rounded-full mt-1 flex-shrink-0">公告</span>
-                        <div>
-                            <p class="text-lg font-medium text-primary">第50次例會邀請國際扶輪講師蒞臨指導</p>
-                            <p class="text-sm text-gray-500">2025年3月5日：歡迎社友與貴賓提前報名參加，共同學習與交流。</p>
+
+                    <!-- 最新消息列表 (Placeholder) -->
+                    <div style="margin-top: 2.5rem; space-y: 1rem;">
+                        <div class="news-list">
+                            <span class="news-tag tag-activity">活動</span>
+                            <div>
+                                <p class="news-title">古都社授證週年慶典圓滿成功！</p>
+                                <p class="news-date">2025年1月10日：超過百位嘉賓共同見證古都社成長，為社區服務開啟新篇章。</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-4 bg-gray-100 rounded-lg flex items-start space-x-4">
-                        <span class="text-sm font-semibold text-white bg-primary px-3 py-1 rounded-full mt-1 flex-shrink-0">服務</span>
-                        <div>
-                            <p class="text-lg font-medium text-primary">攜手家扶中心舉辦愛心園遊會</p>
-                            <p class="text-sm text-gray-500">2025年2月15日：本次活動募得款項全數捐助予台南弱勢家庭。</p>
+                        <div class="news-list" style="margin-top: 1rem;">
+                            <span class="news-tag tag-announce">公告</span>
+                            <div>
+                                <p class="news-title">第50次例會邀請國際扶輪講師蒞臨指導</p>
+                                <p class="news-date">2025年3月5日：歡迎社友與貴賓提前報名參加，共同學習與交流。</p>
+                            </div>
+                        </div>
+                        <div class="news-list" style="margin-top: 1rem;">
+                            <span class="news-tag tag-activity">服務</span>
+                            <div>
+                                <p class="news-title">攜手家扶中心舉辦愛心園遊會</p>
+                                <p class="news-date">2025年2月15日：本次活動募得款項全數捐助予台南弱勢家庭。</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -247,20 +618,21 @@
         </section>
         
         <!-- 🤝 E. 聯絡區塊 (Contact & Join Us) -->
-        <section id="contact" class="py-16 sm:py-24 bg-primary text-white">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl sm:text-5xl font-bold mb-4" style="font-family: 'Noto Serif TC', serif;">
+        <section id="contact" class="section bg-primary text-white">
+            <div class="container" style="text-align: center;">
+                <h2 class="section-title text-white" style="font-family: 'Noto Serif TC', serif; margin-bottom: 1rem;">
                     攜手同行 · 共同服務
                 </h2>
-                <p class="text-xl mb-8 opacity-90">
+                <p style="font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9;">
                     服務社會是我們共同的熱忱。無論是想了解活動詳情，或有意願成為我們的社友，都歡迎與我們聯絡！
                 </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="mailto:gudu.rc@email.com" class="bg-secondary text-primary px-8 py-3 text-lg font-bold rounded-full shadow-xl transition duration-300 transform hover:scale-105 hover:bg-amber-400">
+                <!-- 按鈕群組 -->
+                <div class="flex-buttons" style="display: flex; flex-direction: column; justify-content: center; gap: 1rem;">
+                    <a href="mailto:gudu.rc@email.com" class="hero-button" style="color: var(--color-primary);">
                         <i data-lucide="mail" class="w-5 h-5 inline-block mr-2"></i>
                         聯絡我們 (Email)
                     </a>
-                    <a href="#about" class="border border-white text-white px-8 py-3 text-lg font-bold rounded-full shadow-xl transition duration-300 transform hover:bg-white hover:text-primary">
+                    <a href="#about" style="border: 2px solid var(--color-white); color: var(--color-white);" class="hero-button border-button">
                         <i data-lucide="users" class="w-5 h-5 inline-block mr-2"></i>
                         成為社友
                     </a>
@@ -270,50 +642,60 @@
     </main>
 
     <!-- 3. 頁尾 (Footer) -->
-    <footer class="bg-gray-900 text-gray-300 py-12">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer class="main-footer">
+        <div class="container footer-grid">
             
             <!-- 左側：Logo與基本資訊 -->
-            <div class="md:col-span-2 space-y-4">
-                <div class="flex items-center text-xl font-bold text-white">
-                    <span class="rotary-wheel bg-white"></span>
+            <div>
+                <div class="header-logo text-white" style="margin-bottom: 1rem;">
+                    <span class="rotary-wheel bg-white" style="background-color: var(--color-white);"></span>
                     台南古都扶輪社
                 </div>
                 <p class="text-sm">地址：台南市中西區 (虛擬地址，待填寫)</p>
-                <p class="text-sm">電子信箱：rc.old.capital@email.com</p>
+                <p class="text-sm">電子信箱：gudu.rc@email.com</p>
                 <p class="text-sm">電話：(06) XXXX-XXXX</p>
             </div>
 
             <!-- 右側：重要外部連結 -->
             <div>
-                <h4 class="text-lg font-semibold text-secondary mb-3">重要連結</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-white transition duration-200">國際扶輪社</a></li>
-                    <li><a href="#" class="hover:text-white transition duration-200">國際扶輪3470地區</a></li>
-                    <li><a href="#" class="hover:text-white transition duration-200">台南東北扶輪社 (母社)</a></li>
+                <h4 class="footer-heading">重要連結</h4>
+                <ul class="footer-links" style="list-style: none; padding: 0;">
+                    <li><a href="#">國際扶輪社</a></li>
+                    <li><a href="#">國際扶輪3470地區</a></li>
+                    <li><a href="#">台南東北扶輪社 (母社)</a></li>
                 </ul>
             </div>
 
             <!-- 社群媒體圖標 -->
             <div>
-                <h4 class="text-lg font-semibold text-secondary mb-3">追蹤我們</h4>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-200"><i data-lucide="facebook" class="w-6 h-6"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-200"><i data-lucide="youtube" class="w-6 h-6"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-200"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                <h4 class="footer-heading">追蹤我們</h4>
+                <div class="social-icons">
+                    <a href="#"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                    <a href="#"><i data-lucide="youtube" class="w-6 h-6"></i></a>
+                    <a href="#"><i data-lucide="instagram" class="w-6 h-6"></i></a>
                 </div>
             </div>
         </div>
 
         <!-- 版權宣告 -->
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 border-t border-gray-700 mt-8 pt-6 text-center text-xs text-gray-500">
-            © 2025 台南古都扶輪社 Rotary Club of Tainan Old Capital. All Rights Reserved.
+        <div class="container copyright">
+            © 2025 台南古都扶輪社 Tainan Gudu Rotary Club. All Rights Reserved.
         </div>
     </footer>
 
     <!-- 初始化 Lucide 圖標 -->
     <script>
         lucide.createIcons();
+        // 確保按鈕群組在桌面上水平排列
+        window.addEventListener('resize', () => {
+            const flexButtons = document.querySelector('.flex-buttons');
+            if (window.innerWidth >= 640) {
+                flexButtons.style.flexDirection = 'row';
+            } else {
+                flexButtons.style.flexDirection = 'column';
+            }
+        });
+        window.dispatchEvent(new Event('resize')); // 首次載入時觸發
     </script>
 </body>
 </html>
